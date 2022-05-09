@@ -8,7 +8,7 @@ open Browser.Types
 open Fable.Core
 open Fable.Core.JsInterop
 
-/// JQuery API.
+/// jQuery API.
 type IJQuery =
 
     /// Gets value of CSS property.
@@ -17,10 +17,10 @@ type IJQuery =
     /// Animates towards the given CSS properties.
     abstract animate: properties : obj -> IJQuery
 
-/// Import JQuery.
+/// Import jQuery.
 let jq = importDefault<IJQuery> "jquery"
 
-/// Selects a JQuery object.
+/// Selects a jQuery object.
 [<Emit("$($0)")>]
 let select selector : IJQuery = jsNative
 

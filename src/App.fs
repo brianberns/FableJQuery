@@ -2,46 +2,44 @@ module App
 
 open System
 
-open Browser.Dom
-open Browser.Types
-
 open Fable.Core
 open Fable.Core.JsInterop
 
 /// jQuery API.
-type IJQuery =
+type IjQueryElement =
+
+    /// Animates towards the given CSS properties.
+    abstract animate : properties : obj -> unit
+
+    /// Handles a click event.
+    abstract click : handler : (unit -> unit) -> unit
 
     /// Gets value of CSS property.
     abstract css : propertyName : string -> string
 
-    /// Animates towards the given CSS properties.
-    abstract animate: properties : obj -> IJQuery
+    // import jQuery library
+importDefault<unit> "jquery"
 
-/// Import jQuery.
-let jq = importDefault<IJQuery> "jquery"
-
-/// Selects a jQuery object.
+/// Selects a jQuery element.
 [<Emit("$($0)")>]
-let select selector : IJQuery = jsNative
+let select _selector : IjQueryElement = jsNative
 
 /// Parses pixel length. E.g. "100px" -> 100.0.
 let parsePx (str : string) =
     assert(str.EndsWith("px"))
-    str.Substring(0, str.Length - 2)
+    str.Substring(0, str.Length - "px".Length)
         |> Double.Parse
 
+    // prepare to animate
+let img = select "#imgFable"
+let div = select "#divSurface"
+let btn = select "#btnGo"
+let imgWidth = img.css "width" |> parsePx
+let divWidth = div.css "width" |> parsePx
+
     // animate on button click
-let btnGo =
-    document.getElementById("btnGo")
-        :?> HTMLButtonElement
-btnGo.onclick <-
-
-    let jqImg = select "#imgFable"
-    let jqDiv = select "#divSurface"
-    let imgWidth = jqImg.css "width" |> parsePx
-    let divWidth = jqDiv.css "width" |> parsePx
-
-    fun _ ->
-        let left = jqImg.css "left" |> parsePx
-        let value = sprintf "%Apx" (divWidth - imgWidth - left)
-        jqImg.animate {| left = value |}
+btn.click (fun () ->
+    let value =
+        let left = img.css "left" |> parsePx
+        $"{divWidth - imgWidth - left}px"
+    img.animate {| left = value |})

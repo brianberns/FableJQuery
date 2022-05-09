@@ -27,7 +27,7 @@ importDefault<unit> "jquery"
 
 /// Selects a jQuery element.
 [<Emit("$($0)")>]
-let select _selector : IjQueryElement = jsNative
+let select (_selector : obj) : IjQueryElement = jsNative
 
 /// Parses pixel length. E.g. "100px" -> 100.0.
 let parsePx (str : string) =

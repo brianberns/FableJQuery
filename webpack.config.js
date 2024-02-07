@@ -1,7 +1,3 @@
-// Note this only includes basic configuration for development mode.
-// For a more comprehensive configuration check:
-// https://github.com/fable-compiler/webpack-config-template
-
 var path = require("path");
 
 module.exports = {
@@ -12,13 +8,12 @@ module.exports = {
         filename: "bundle.js",
     },
     devServer: {
-        publicPath: "/",
-        contentBase: "./public",
-        port: 8080,
+        static: "./public",
+        port: 8080
     },
     resolve: {
         alias: {
-            jquery: "jquery/src/jquery"
+            jquery: "jquery/src/jquery"   // important - can't import jQuery from dist folder
         }
     },
     module: {
